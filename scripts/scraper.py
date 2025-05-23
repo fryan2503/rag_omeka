@@ -65,9 +65,18 @@ def extract_data_from_soup(soup):
     return data
 
 def append_to_json(data, output_path):
+    # Ensure data is a list
+    if not isinstance(data, list):
+        data = [data]
+
     if os.path.exists(output_path):
         with open(output_path, 'r', encoding='utf-8') as f:
-            existing_data = json.load(f)
+            try:
+                existing_data = json.load(f)
+                if not isinstance(existing_data, list):
+                    existing_data = [existing_data]
+            except json.JSONDecodeError:
+                existing_data = []
     else:
         existing_data = []
 
@@ -77,6 +86,7 @@ def append_to_json(data, output_path):
         json.dump(existing_data, f, ensure_ascii=False, indent=4)
 
     print(f"Appended {len(data)} records to {output_path}")
+
 
 def scrape_omeka(base_url, total_pages, output_path):
     page_urls = generate_page_urls(base_url, total_pages)
@@ -95,7 +105,7 @@ def scrape_omeka(base_url, total_pages, output_path):
 
 def main():
     base_url = "https://miamiuniversityartmuseum.omeka.net/items/browse"
-    total_pages = 2
+    total_pages = 10
     output_path = "data/extracted_data.json"
     scrape_omeka(base_url, total_pages, output_path)
 
