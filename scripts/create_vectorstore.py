@@ -1,10 +1,14 @@
-EMBEDDINGS_DIRECTORY = './vstore' # directory to store embeddings
+EMBEDDINGS_DIRECTORY = './vstore'  # directory to store embeddings
 import json
+from pathlib import Path
 from langchain.vectorstores import FAISS
 
 from langchain_nomic.embeddings import NomicEmbeddings
 from langchain.schema import Document
-with open("/Users/ryan/PycharmProjects/pythonProject/College/projects/rag_omeka/data/extracted_data.json") as file:
+
+DATA_PATH = Path(__file__).resolve().parent.parent / 'data' / 'extracted_data.json'
+
+with open(DATA_PATH, "r", encoding="utf-8") as file:
     data = json.load(file)
 for item in data:
     desc = item.get('Description', '')
