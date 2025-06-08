@@ -1,0 +1,8 @@
+python-dotenv
+streamlit
+langchain
+langchain-nomic
+langchain-ollama
+faiss-cpu
+beautifulsoup4
+requests
