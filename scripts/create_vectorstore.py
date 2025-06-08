@@ -1,15 +1,11 @@
 EMBEDDINGS_DIRECTORY = './vstore' # directory to store embeddings
 import json
 from langchain.vectorstores import FAISS
-
 from langchain_nomic.embeddings import NomicEmbeddings
 from langchain.schema import Document
 with open("/Users/ryan/PycharmProjects/pythonProject/College/projects/rag_omeka/data/extracted_data.json") as file:
     data = json.load(file)
-for item in data:
-    desc = item.get('Description', '')
-    print(f"Title: {item.get('Title', 'N/A')}, Description token length: {len(desc.split())}")
-# Create documents
+
 docs = []
 for art in data:
     # Create a readable summary for embedding (page_content)
@@ -20,7 +16,8 @@ for art in data:
         f"Medium: {art.get('Medium', 'Unknown')}\n"
         f"Format: {art.get('Format', 'Unknown')}\n"
         f"Subject: {art.get('Subject', 'Unknown')}\n"
-        f"Description: {art.get('Description', 'No description provided.')}"
+        f"Description: {art.get('Description', 'No description provided.')}\n"
+        f"Tags: {', '.join(art.get('Tags', []))}\n"
     )
 
     # Create metadata dictionary
@@ -39,7 +36,9 @@ for art in data:
     }
 
     docs.append(Document(page_content=page_content, metadata=metadata))
+ 
 embedding_model = NomicEmbeddings(model="nomic-embed-text-v1.5", inference_mode="local")
+
 vectorstore = FAISS.from_documents(
     documents=docs,
     embedding=embedding_model
@@ -47,5 +46,3 @@ vectorstore = FAISS.from_documents(
 # Persist the FAISS index to disk
 vectorstore.save_local(EMBEDDINGS_DIRECTORY)
 
- # Create retriever
-retriever = vectorstore.as_retriever(k=3)

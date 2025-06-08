@@ -105,7 +105,7 @@ def scrape_omeka(base_url, total_pages, output_path):
 
 def main():
     base_url = "https://miamiuniversityartmuseum.omeka.net/items/browse"
-    total_pages = 10
+    total_pages = 245
     output_path = "data/extracted_data.json"
     scrape_omeka(base_url, total_pages, output_path)
 
