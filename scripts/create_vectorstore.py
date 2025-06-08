@@ -36,7 +36,9 @@ for art in data:
     }
 
     docs.append(Document(page_content=page_content, metadata=metadata))
+ 
 embedding_model = NomicEmbeddings(model="nomic-embed-text-v1.5", inference_mode="local")
+
 vectorstore = FAISS.from_documents(
     documents=docs,
     embedding=embedding_model
@@ -44,5 +46,3 @@ vectorstore = FAISS.from_documents(
 # Persist the FAISS index to disk
 vectorstore.save_local(EMBEDDINGS_DIRECTORY)
 
- # Create retriever
-retriever = vectorstore.as_retriever(k=3)
