@@ -41,7 +41,6 @@ def get_item_links(page_url):
             # Construct the absolute URL
             full_url = "https://miamiuniversityartmuseum.omeka.net" + a_tag['href']
             links.append(full_url)
-    print(links)
     return links
     
     
@@ -162,7 +161,7 @@ def scrape_omeka(base_url, total_pages, output_path):
 
 def main():
     base_url = "https://miamiuniversityartmuseum.omeka.net/items/browse"
-    total_pages = 1
+    total_pages = 2
     output_path = "data/extracted_data.json"
     scrape_omeka(base_url, total_pages, output_path)
 
