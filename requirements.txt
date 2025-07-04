@@ -1,8 +1,11 @@
-python-dotenv
 streamlit
 langchain
+langchain-community
 langchain-nomic
 langchain-ollama
 faiss-cpu
-beautifulsoup4
+nomic
+pandas
+numpy
 requests
+beautifulsoup4
