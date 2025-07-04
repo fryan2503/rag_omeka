@@ -148,10 +148,10 @@ def scrape_omeka(base_url, total_pages, output_path):
     """
     page_urls = generate_page_urls(base_url, total_pages)
 
-    for page_url in page_urls:
+    for page_url in page_urls: # page_url is the url of the individual artwork
         print(f"Processing page: {page_url}")
         page_data = []
-        item_links = get_item_links(page_url) # page_url is the url of the individual artwork
+        item_links = get_item_links(page_url) 
         for item_url in item_links:
             soup = fetch_soup(item_url)
             if soup:
