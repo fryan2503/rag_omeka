@@ -1,9 +1,10 @@
-import re
+
+
 import requests
 from bs4 import BeautifulSoup
 import streamlit as st
 from typing import Annotated, List, TypedDict
-
+from langchain_openai import ChatOpenAI
 from langchain.vectorstores import FAISS
 from langchain_nomic.embeddings import NomicEmbeddings
 from langchain_ollama import ChatOllama
@@ -20,7 +21,17 @@ vectorstore = FAISS.load_local(
     allow_dangerous_deserialization=True,
 )
 retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
-llm = ChatOllama(model="llama3", temperature=0)
+# llm = ChatOllama(model="llama3", temperature=0)
+
+def choose_model(model_name: str):
+    if model_name == "ollama":
+        return ChatOllama(model="llama3", temperature=0)
+    elif model_name == "openai":
+        return ChatOpenAI(model="gpt-4", temperature=0)
+    else:
+        raise ValueError(f"Unsupported model name: {model_name}")
+llm = choose_model("openai")
+
 
 rag_prompt = """You are an assistant for question-answering tasks. 
 
@@ -173,7 +184,7 @@ builder.add_edge("generate", END)
 graph = builder.compile()
 
 # --- Streamlit UI --------------------------------------------------------------
-st.set_page_config(page_title="Art Museum RAG", page_icon="🎨", layout="wide")
+st.set_page_config(page_title="RCCAM CHAT", page_icon="🎨", layout="wide")
 st.markdown(
     """
     <style>
@@ -183,27 +194,61 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-st.title("🎨 Art Museum LangGraph Chat")
 
-query = st.text_input("Ask about an artwork:")
-submit = st.button("Search")
 
-if submit and query.strip():
-    with st.spinner("Retrieving..."):
-        result = graph.invoke({"question": query})
-    st.subheader("Answer")
-    st.write(result["generation"].content)
+def chat_tab():
+    st.title("🎨 RCCAM CHAT")
 
-    st.subheader("Retrieved Documents")
-    for i, doc in enumerate(result["documents"], start=1):
-        meta = doc.metadata
-        link = meta.get("collection_link", None)
-        print(link)
+    query = st.text_input("Ask about an artwork:")
+    submit = st.button("Search")
 
-        img_url = fetch_image(link)
-        with st.expander(f"Doc {i}: {meta.get('title', 'Untitled')}"):
-            if img_url:
-                st.image(img_url, use_column_width=True)
-            st.write(doc.page_content)
-            if link:
-                st.markdown(f"[View on Omeka]({link})")
+    if submit and query.strip():
+        with st.spinner("Retrieving..."):
+            result = graph.invoke({"question": query})
+        st.subheader("Answer")
+        st.write(result["generation"].content)
+
+        st.subheader("Retrieved Documents")
+        for i, doc in enumerate(result["documents"], start=1):
+            meta = doc.metadata
+            link = meta.get("collection_link", None)
+            print(link)
+
+            img_url = fetch_image(link)
+            with st.expander(f"Doc {i}: {meta.get('title', 'Untitled')}"):
+                if img_url:
+                    st.image(img_url, width=200)
+                st.write(doc.page_content)
+                if link:
+                    st.markdown(f"[View on Omeka]({link})")
+
+
+TAB_MAPPING = {
+    "RCCAM CHAT": chat_tab,
+    "Interactive Graph Vector Database": lambda: st.write("Graph visualization is not implemented yet."),
+}
+
+st.sidebar.title("Navigation")
+tab_selection = st.sidebar.radio("Select a tab", list(TAB_MAPPING.keys()))
+
+st.sidebar.markdown("""
+### About the Author
+**Ryan Singh**  
+Business Analytics Student at Miami University
+[LinkedIn](https://www.linkedin.com/in/ryansingh25/) | [GitHub](https://github.com/fryan2503)
+
+### How to Use RCCAM CHAT
+- Ask questions about artworks in our digital collection.
+- The AI will search our vector database and return relevant artworks and information.
+- Click on document expanders to view details and images.
+- For best results, use artist names, artwork titles, or art periods in your queries.
+
+---
+Built for digital exploration and educational use at the **Richard and Carole Cocks Art Museum** (RCCAM).  
+Questions or feedback? reach out singhr7@miamioh.edu
+""")
+
+
+
+
+TAB_MAPPING[tab_selection]()
