@@ -5,6 +5,10 @@ from langchain_nomic.embeddings import NomicEmbeddings
 from langchain.schema import Document
 with open("/Users/ryan/PycharmProjects/pythonProject/College/projects/rag_omeka/data/extracted_data.json") as file:
     data = json.load(file)
+from sentence_transformers import SentenceTransformer
+
+# Load the model
+embedding_model = NomicEmbeddings(model="nomic-embed-text-v1.5", inference_mode="local")
 
 docs = []
 for art in data:
