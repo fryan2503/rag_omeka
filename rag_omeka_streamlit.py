@@ -19,6 +19,7 @@ vectorstore = FAISS.load_local(
 )
 retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
 
+
 def choose_cloud_local(model_name: str):
     global llm
     if model_name == "local":
@@ -181,7 +182,7 @@ builder.add_edge("generate", END)
 graph = builder.compile()
 
 # --- Streamlit UI --------------------------------------------------------------
-st.set_page_config(page_title="RCCAM CHAT", page_icon="🎨", layout="wide")
+st.set_page_config(page_title="ART CHAT", page_icon="🎨", layout="wide")
 st.markdown(
     """
     <style>
@@ -194,7 +195,7 @@ st.markdown(
 
 
 def chat_tab():
-    st.title("🎨 RCCAM CHAT")
+    st.title("🎨 ART CHAT")
 
     query = st.text_input("Ask about an artwork:")
     submit = st.button("Search")
@@ -221,7 +222,7 @@ def chat_tab():
 
 
 TAB_MAPPING = {
-    "RCCAM CHAT": chat_tab,
+    "ART CHAT": chat_tab,
     "Interactive Graph Vector Database": lambda: st.write("Graph visualization is not implemented yet."),
 }
 
@@ -241,7 +242,7 @@ Business Analytics Student at Miami University
 - For best results, use artist names, artwork titles, or art periods in your queries.
 
 ---
-Built for digital exploration and educational use by using the artwork at the **Richard and Carole Cocks Art Museum** (RCCAM). This project is not affiliated with RCCAM or any of its partners.
+Built for digital exploration and educational use by using the artwork at the **Richard and Carole Cocks Art Museum** (ART). This project is not affiliated with ART or any of its partners.
 Questions or feedback? reach out singhr7@miamioh.edu
 """)
 
