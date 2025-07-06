@@ -1,3 +1,4 @@
+import os 
 import requests
 from bs4 import BeautifulSoup
 import streamlit as st
@@ -11,6 +12,8 @@ from langgraph.graph.message import add_messages
 
 # --- Vector store and model ----------------------------------------------------
 EMBEDDINGS_DIRECTORY = "./vstore"
+OUTPUT_DIR = "./assets"
+
 embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 vectorstore = FAISS.load_local(
     EMBEDDINGS_DIRECTORY,
@@ -221,9 +224,22 @@ def chat_tab():
                     st.markdown(f"[View on Omeka]({link})")
 
 
+def vector_graph_tab():
+    """Display the pre-generated 3D vector plot."""
+    st.title("Interactive Graph Vector Database")
+    html_path = os.path.join(OUTPUT_DIR, "vectorstore_3d.html")
+    if not os.path.exists(html_path):
+        st.warning(f"{html_path} not found. Run scripts/create_vector_plot.py to generate it.")
+        return
+    with open(html_path, "r") as f:
+        html = f.read()
+    st.components.v1.html(html, height=700, width=900, scrolling=False)
+
+
+
 TAB_MAPPING = {
     "ART CHAT": chat_tab,
-    "Interactive Graph Vector Database": lambda: st.write("Graph visualization is not implemented yet."),
+    "Interactive Graph Vector Database": vector_graph_tab,
 }
 
 st.sidebar.title("Navigation")
