@@ -6,3 +6,5 @@ langchain-ollama
 faiss-cpu
 beautifulsoup4
 requests
+plotly
+umap-learn
