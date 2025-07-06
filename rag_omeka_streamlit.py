@@ -1,12 +1,9 @@
-
-
 import requests
 from bs4 import BeautifulSoup
 import streamlit as st
 from typing import Annotated, List, TypedDict
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain.vectorstores import FAISS
-from langchain_nomic.embeddings import NomicEmbeddings
 from langchain_ollama import ChatOllama
 from langchain_core.messages import AnyMessage, HumanMessage
 from langgraph.graph import StateGraph, START, END
@@ -14,24 +11,24 @@ from langgraph.graph.message import add_messages
 
 # --- Vector store and model ----------------------------------------------------
 EMBEDDINGS_DIRECTORY = "./vstore"
-embedding_model = NomicEmbeddings(model="nomic-embed-text-v1.5", inference_mode="local")
+embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 vectorstore = FAISS.load_local(
     EMBEDDINGS_DIRECTORY,
     embeddings=embedding_model,
     allow_dangerous_deserialization=True,
 )
 retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
-# llm = ChatOllama(model="llama3", temperature=0)
 
-def choose_model(model_name: str):
-    if model_name == "ollama":
-        return ChatOllama(model="llama3", temperature=0)
-    elif model_name == "openai":
-        return ChatOpenAI(model="gpt-4", temperature=0)
+def choose_cloud_local(model_name: str):
+    global llm
+    if model_name == "local":
+        llm = ChatOllama(model="llama3", temperature=0)
+    elif model_name == "cloud":
+        llm = ChatOpenAI(model="gpt-4", temperature=0)
     else:
-        raise ValueError(f"Unsupported model name: {model_name}")
-llm = choose_model("openai")
+        raise ValueError(f"Unsupported input {model_name}")
 
+choose_cloud_local("cloud")  # Change to "local" for local model
 
 rag_prompt = """You are an assistant for question-answering tasks. 
 
@@ -237,14 +234,14 @@ st.sidebar.markdown("""
 Business Analytics Student at Miami University
 [LinkedIn](https://www.linkedin.com/in/ryansingh25/) | [GitHub](https://github.com/fryan2503)
 
-### How to Use RCCAM CHAT
+### How to Use ART CHAT
 - Ask questions about artworks in our digital collection.
 - The AI will search our vector database and return relevant artworks and information.
 - Click on document expanders to view details and images.
 - For best results, use artist names, artwork titles, or art periods in your queries.
 
 ---
-Built for digital exploration and educational use at the **Richard and Carole Cocks Art Museum** (RCCAM).  
+Built for digital exploration and educational use by using the artwork at the **Richard and Carole Cocks Art Museum** (RCCAM). This project is not affiliated with RCCAM or any of its partners.
 Questions or feedback? reach out singhr7@miamioh.edu
 """)
 
