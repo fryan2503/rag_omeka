@@ -1,10 +1,19 @@
-python-dotenv
 streamlit
 langchain
+langchain-community
 langchain-nomic
 langchain-ollama
+langchain-openai
 faiss-cpu
-beautifulsoup4
+nomic
+pandas
+numpy
 requests
+# from ryan branch
 plotly
 umap-learn
+# from main branch
+beautifulsoup4
+jinja2
+pyyaml
+langgraph
