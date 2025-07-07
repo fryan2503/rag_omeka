@@ -6,8 +6,7 @@ def render_sidebar():
         """
         ### About the Author
         **Ryan Singh**
-        Business Analytics Student at Miami University
-        [LinkedIn](https://www.linkedin.com/in/ryansingh25/) | [GitHub](https://github.com/fryan2503)
+        [GitHub](https://github.com/fryan2503/rag_omeka)
 
         ### How to Use ART CHAT
         - Ask questions about artworks in our digital collection.
