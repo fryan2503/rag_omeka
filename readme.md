@@ -2,6 +2,8 @@
 
 This project is part of the college coursework and focuses on integrating with the Omeka platform. This repository can be used with any collection published on Omeka.
 
+🚀 [Launch Streamlit App](https://ragomeka.streamlit.app/)
+
 ## Objectives
 - Learn and utilize the Omeka platform.
 - Develop features or scripts to enhance functionality.
