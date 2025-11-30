@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from typing import Annotated, List, TypedDict
 
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_ollama import ChatOllama
 from langchain_core.messages import AnyMessage, HumanMessage
 from langgraph.graph import StateGraph, START, END

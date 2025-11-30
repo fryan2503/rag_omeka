@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import umap
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 
 EMBEDDINGS_DIRECTORY = "./vstore"

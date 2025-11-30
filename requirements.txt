@@ -9,9 +9,7 @@ nomic
 pandas
 numpy
 requests
-# from ryan branch
-plotly
-umap-learn
+
 # from main branch
 beautifulsoup4
 jinja2

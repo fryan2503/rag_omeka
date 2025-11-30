@@ -1,7 +1,7 @@
 EMBEDDINGS_DIRECTORY = './vstore'  # Directory to store embeddings
 
 import json
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_nomic.embeddings import NomicEmbeddings
 from langchain.schema import Document
 from langchain_openai import OpenAIEmbeddings
